@@ -26,7 +26,7 @@
         "php": ">=7.4",
         "ext-gearman": "*",
 
-        "symfony/cache": "~1.0",
+        "symfony/cache": "5.1.*",
         "doctrine/common": "3.1.2",
 
         "symfony/dependency-injection": "5.1.*",
