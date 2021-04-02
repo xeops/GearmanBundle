@@ -3,6 +3,10 @@ services:
     #
     # Services
     #
+    doctrine_cache.providers.gearman_cache:
+        class: Doctrine\Common\Cache\FilesystemCache
+        arguments:
+            - "%kernel.cache_dir%"
     gearman.parser:
         class: "%gearman.parser.class%"
         arguments:
