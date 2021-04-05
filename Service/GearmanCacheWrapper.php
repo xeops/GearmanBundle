@@ -184,13 +184,15 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
      *
      * @param string $cacheDir The cache directory
      *
-     * @return GearmanCacheWrapper self Object
+     * @return string[] class list to preload
      */
     public function warmUp($cacheDir)
     {
         $this->load($this->getCache(), $this->getCacheId());
 
-        return $this;
+        return array_map(function (array $workerDefinition){
+            return $workerDefinition['className'];
+        }, $this->getCache()->fetch($this->getCacheId()));
     }
 
     /**
