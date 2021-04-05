@@ -109,7 +109,7 @@ class GearmanDescriber
         /**
          * Commandline
          */
-        $script = $this->kernel->getRootDir() . '/console gearman:worker:execute';
+        $script = $this->kernel->getProjectDir() . '/console gearman:worker:execute';
 
         $output->writeln('');
         $output->writeln('<info>@Worker\className : ' . $worker['className'] . '</info>');
