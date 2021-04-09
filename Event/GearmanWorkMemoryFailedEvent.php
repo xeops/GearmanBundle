@@ -4,7 +4,7 @@
 namespace Mmoreram\GearmanBundle\Event;
 
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class GearmanWorkMemoryFailedEvent extends Event
 {
