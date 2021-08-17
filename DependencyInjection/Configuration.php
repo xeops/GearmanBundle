@@ -31,7 +31,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
+        $treeBuilder = new TreeBuilder('gearman');
         $rootNode = $treeBuilder->root('gearman');
 
         $rootNode
