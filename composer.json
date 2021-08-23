@@ -26,22 +26,22 @@
         "php": ">=7.0",
         "ext-gearman": "*",
 
-        "symfony/cache": "5.1.*",
+        "symfony/cache": "5.3.*",
         "doctrine/common": "3.1.2",
 
-        "symfony/dependency-injection": "5.1.*",
-        "symfony/framework-bundle": "5.1.*",
-        "symfony/http-kernel": "5.1.*",
-        "symfony/console": "5.1.*",
-        "symfony/config": "5.1.*",
-        "symfony/finder": "5.1.*",
-        "symfony/options-resolver": "5.1.*"
+        "symfony/dependency-injection": "5.3.*",
+        "symfony/framework-bundle": "5.3.*",
+        "symfony/http-kernel": "5.3.*",
+        "symfony/console": "5.3.*",
+        "symfony/config": "5.3.*",
+        "symfony/finder": "5.3.*",
+        "symfony/options-resolver": "5.3.*"
     },
     "target-dir": "Mmoreram/GearmanBundle",
     "autoload": {
         "psr-0": { "Mmoreram\\GearmanBundle": "" }
     },
-    "minimum-stability": "stable", 
+    "minimum-stability": "stable",
     "extra": {
         "branch-alias": {
             "dev-master": "4.0-dev"
