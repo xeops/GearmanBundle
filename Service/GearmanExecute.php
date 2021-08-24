@@ -350,7 +350,7 @@ class GearmanExecute extends AbstractGearmanService
             $iterations--;
 
             $event = new GearmanWorkExecutedEvent($jobs, $iterations, $gearmanWorker->returnCode());
-            $this->eventDispatcher->dispatch(GearmanEvents::GEARMAN_WORK_EXECUTED, $event);
+            $this->eventDispatcher->dispatch( $event, GearmanEvents::GEARMAN_WORK_EXECUTED);
 
             if ($gearmanWorker->returnCode() != GEARMAN_SUCCESS) {
 
@@ -369,7 +369,7 @@ class GearmanExecute extends AbstractGearmanService
             if($memoryLimit && memory_get_usage(true) > intval($memoryLimit))
             {
                 $event = new GearmanWorkMemoryFailedEvent($jobs, $iterations, $memoryLimit, memory_get_usage(true));
-                $this->eventDispatcher->dispatch(GearmanEvents::GEARMAN_WORK_MEMORY_FAILED, $event);
+                $this->eventDispatcher->dispatch( $event, GearmanEvents::GEARMAN_WORK_MEMORY_FAILED);
                 break;
             }
         }
@@ -451,7 +451,7 @@ class GearmanExecute extends AbstractGearmanService
 
         $event = new GearmanWorkStartingEvent($context['jobs']);
 		$event->setJob($job);
-        $this->eventDispatcher->dispatch(GearmanEvents::GEARMAN_WORK_STARTING, $event);
+        $this->eventDispatcher->dispatch( $event, GearmanEvents::GEARMAN_WORK_STARTING);
 
         $result = call_user_func_array(
             array($context['job_object_instance'], $context['job_method']),
