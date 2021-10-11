@@ -53,7 +53,7 @@ class GearmanDescriber
         /**
          * Commandline
          */
-        $script = $this->kernel->getRootDir() . '/console gearman:job:execute';
+        $script = $this->kernel->getProjectDir() . '/console gearman:job:execute';
 
         /**
          * A job descriptions contains its worker description
