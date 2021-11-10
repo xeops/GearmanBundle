@@ -58,13 +58,9 @@ class JobStatus
         $this->known = (isset($response[0]) && $response[0]);
         $this->running = (isset($response[1]) && $response[1]);
 
-        $this->completed = (isset($response[2]) && !$response[2])
-            ? 0
-            : $response[2];
+        $this->completed = !isset($response[2]) || !$response[2]  ? 0 : $response[2];
 
-        $this->completionTotal = (isset($response[3]) && !$response[3])
-            ? 0
-            : $response[3];
+        $this->completionTotal = !isset($response[3]) || !$response[3]  ? 0 : $response[3];
     }
 
     /**

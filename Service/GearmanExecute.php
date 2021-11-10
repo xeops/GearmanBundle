@@ -392,8 +392,10 @@ class GearmanExecute extends AbstractGearmanService
 
         if (!empty($servers)) {
 
-            foreach ($servers as $server) {
-                if (@$gmworker->addServer($server['host'], $server['port'])) {
+            foreach ($servers as $server)
+			{
+				if($this->isServerAvailable($server['host'], $server['port']) && @$gmworker->addServer($server['host'], $server['port']))
+				{
                     $successes[] = $server;
                 }
             }
@@ -405,6 +407,17 @@ class GearmanExecute extends AbstractGearmanService
 
         return $successes;
     }
+
+	private function isServerAvailable($host, $port)
+	{
+		$handle = @fsockopen($host, $port, $errorNumber, $errorString, 5);
+		if (!$handle)
+		{
+			return false;
+		}
+		fclose($handle);
+		return true;
+	}
 
     /**
      * Executes a worker given a workerName subscribing all his jobs inside and
