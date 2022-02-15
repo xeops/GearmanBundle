@@ -3,6 +3,7 @@
     "replace": {
         "mmoreramerino/gearman-bundle": "dev-master"
     },
+
     "description": "Adds gearman support to your Symfony2 or Symfony3 project",
     "keywords": ["gearman"],
     "homepage": "https://github.com/mmoreram/GearmanBundle",
@@ -25,17 +26,16 @@
     "require": {
         "php": ">=7.0",
         "ext-gearman": "*",
-
-        "symfony/cache": "5.3.*",
+        "symfony/cache": "~5.0",
         "doctrine/common": "3.1.2",
-
-        "symfony/dependency-injection": "5.3.*",
-        "symfony/framework-bundle": "5.3.*",
-        "symfony/http-kernel": "5.3.*",
-        "symfony/console": "5.3.*",
-        "symfony/config": "5.3.*",
-        "symfony/finder": "5.3.*",
-        "symfony/options-resolver": "5.3.*"
+        "doctrine/cache": "1.12.1",
+        "symfony/dependency-injection": "~5.0",
+        "symfony/framework-bundle": "~5.0",
+        "symfony/http-kernel": "~5.0",
+        "symfony/console": "~5.0",
+        "symfony/config": "~5.0",
+        "symfony/finder": "~5.0",
+        "symfony/options-resolver": "~5.0"
     },
     "target-dir": "Mmoreram/GearmanBundle",
     "autoload": {
@@ -45,9 +45,14 @@
     "extra": {
         "branch-alias": {
             "dev-master": "4.0-dev"
+        },
+        "symfony": {
+            "require": "~5.0"
         }
     },
     "require-dev": {
+        "roave/security-advisories": "dev-latest"
+        ,
         "phpunit/phpunit": ">=4.8 <6.0"
     }
 }
