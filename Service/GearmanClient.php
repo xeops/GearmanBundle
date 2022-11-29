@@ -96,6 +96,17 @@ class GearmanClient extends AbstractGearmanService
 	}
 
 	/**
+     * Returns \GearmanClient with filled servers info
+     * @return \GearmanClient
+     */
+    public function getPreparedNativeClient(): \GearmanClient
+    {
+        $client = new \GearmanClient();
+        $this->assignServers($client);
+        return $client;
+    }
+
+    /**
 	 * Init tasks structure
 	 *
 	 * @return GearmanClient self Object
