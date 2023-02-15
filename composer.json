@@ -4,7 +4,9 @@
         "mmoreramerino/gearman-bundle": "dev-master"
     },
     "description": "Adds gearman support to your Symfony2 or Symfony3 project",
-    "keywords": ["gearman"],
+    "keywords": [
+        "gearman"
+    ],
     "homepage": "https://github.com/mmoreram/GearmanBundle",
     "type": "symfony-bundle",
     "license": "MIT",
@@ -25,10 +27,8 @@
     "require": {
         "php": ">=7.0",
         "ext-gearman": "*",
-
         "doctrine/doctrine-cache-bundle": "~1.0",
         "doctrine/common": "~2.2",
-
         "symfony/dependency-injection": "~3.0|^4.0|^5.1",
         "symfony/framework-bundle": "~3.0|^4.0|^5.1",
         "symfony/http-kernel": "~3.0|^4.0|^5.1",
@@ -39,9 +39,11 @@
     },
     "target-dir": "Mmoreram/GearmanBundle",
     "autoload": {
-        "psr-0": { "Mmoreram\\GearmanBundle": "" }
+        "psr-0": {
+            "Mmoreram\\GearmanBundle": ""
+        }
     },
-    "minimum-stability": "stable", 
+    "minimum-stability": "stable",
     "extra": {
         "branch-alias": {
             "dev-master": "4.0-dev"

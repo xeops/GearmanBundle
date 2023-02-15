@@ -14,6 +14,7 @@
 namespace Mmoreram\GearmanBundle\Module;
 
 use Doctrine\Common\Annotations\Reader;
+use  Symfony\Component\DependencyInjection\ContainerInterface;
 use ReflectionClass;
 
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
@@ -133,20 +134,25 @@ class WorkerClass
      * @var string $jobPrefix
      */
     private $jobPrefix = null;
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
 
     /**
      * Retrieves all jobs available from worker
      *
-     * @param WorkAnnotation  $workAnnotation  workAnnotation class
+     * @param WorkAnnotation $workAnnotation workAnnotation class
      * @param ReflectionClass $reflectionClass Reflexion class
-     * @param Reader          $reader          Reader class
-     * @param array           $servers         Array of servers defined for Worker
-     * @param array           $defaultSettings Default settings for Worker
+     * @param Reader $reader Reader class
+     * @param array $servers Array of servers defined for Worker
+     * @param array $defaultSettings Default settings for Worker
      */
-    public function __construct(WorkAnnotation $workAnnotation, ReflectionClass $reflectionClass, Reader $reader, array $servers, array $defaultSettings)
+    public function __construct(WorkAnnotation $workAnnotation, ReflectionClass $reflectionClass, Reader $reader, array $servers, array $defaultSettings, ContainerInterface $container)
     {
 
         $this->namespace = $reflectionClass->getNamespaceName();
+        $this->container = $container;
 
         /**
          * If WorkAnnotation name field is defined, workers_name_prepend_namespace value
@@ -179,11 +185,11 @@ class WorkerClass
         $this->className = $reflectionClass->getName();
         $this->service = $workAnnotation->service;
 
-        if (isset($defaultSettings['job_prefix'])) {
+        if (isset($defaultSettings['job_prefix']))
+        {
 
             $this->jobPrefix = $defaultSettings['job_prefix'];
         }
-
         $this->servers = $this->loadServers($workAnnotation, $servers);
         $this->iterations = $this->loadIterations($workAnnotation, $defaultSettings);
         $this->defaultMethod = $this->loadDefaultMethod($workAnnotation, $defaultSettings);
@@ -200,7 +206,7 @@ class WorkerClass
      * Otherwise is used servers set in Class
      *
      * @param WorkAnnotation $workAnnotation WorkAnnotation class
-     * @param array          $servers        Array of servers defined for Worker
+     * @param array $servers Array of servers defined for Worker
      *
      * @return array Servers
      */
@@ -209,11 +215,21 @@ class WorkerClass
         /**
          * If is configured some servers definition in the worker, overwrites
          */
-        if ($workAnnotation->servers) {
+        if ($workAnnotation->servers)
+        {
 
-            $servers = (is_array($workAnnotation->servers) && !isset($workAnnotation->servers['host']))
-                ? $workAnnotation->servers
-                : array($workAnnotation->servers);
+            if (is_array($workAnnotation->servers) && !isset($workAnnotation->servers['host']))
+            {
+                $servers = $workAnnotation->servers;
+            }
+            elseif (is_string($workAnnotation->servers) && $this->container->hasParameter($workAnnotation->servers))
+            {
+                $servers = $this->container->getParameter($workAnnotation->servers);
+            }
+            else
+            {
+                $servers = array($workAnnotation->servers);
+            }
         }
 
         return $servers;
@@ -225,16 +241,16 @@ class WorkerClass
      * If iterations is defined in WorkAnnotation, this one is used.
      * Otherwise is used set in Class
      *
-     * @param WorkAnnotation $workAnnotation  WorkAnnotation class
-     * @param array          $defaultSettings Default settings for Worker
+     * @param WorkAnnotation $workAnnotation WorkAnnotation class
+     * @param array $defaultSettings Default settings for Worker
      *
      * @return integer Iteration
      */
     private function loadIterations(WorkAnnotation $workAnnotation, array $defaultSettings)
     {
         return is_null($workAnnotation->iterations)
-            ? (int) $defaultSettings['iterations']
-            : (int) $workAnnotation->iterations;
+            ? (int)$defaultSettings['iterations']
+            : (int)$workAnnotation->iterations;
     }
 
     /**
@@ -243,8 +259,8 @@ class WorkerClass
      * If defaultMethod is defined in WorkAnnotation, this one is used.
      * Otherwise is used set in Class
      *
-     * @param WorkAnnotation $workAnnotation  WorkAnnotation class
-     * @param array          $defaultSettings Default settings for Worker
+     * @param WorkAnnotation $workAnnotation WorkAnnotation class
+     * @param array $defaultSettings Default settings for Worker
      *
      * @return string Default method
      */
@@ -269,8 +285,8 @@ class WorkerClass
     private function loadMinimumExecutionTime(WorkAnnotation $workAnnotation, array $defaultSettings)
     {
         return is_null($workAnnotation->minimumExecutionTime)
-            ? (int) $defaultSettings['minimum_execution_time']
-            : (int) $workAnnotation->minimumExecutionTime;
+            ? (int)$defaultSettings['minimum_execution_time']
+            : (int)$workAnnotation->minimumExecutionTime;
     }
 
     /**
@@ -287,8 +303,8 @@ class WorkerClass
     private function loadTimeout(WorkAnnotation $workAnnotation, array $defaultSettings)
     {
         return is_null($workAnnotation->timeout)
-            ? (int) $defaultSettings['timeout']
-            : (int) $workAnnotation->timeout;
+            ? (int)$defaultSettings['timeout']
+            : (int)$workAnnotation->timeout;
     }
 
     /**
@@ -300,15 +316,15 @@ class WorkerClass
     private function loadMemoryLimit(WorkAnnotation $workAnnotation, array $defaultSettings)
     {
         return is_null($workAnnotation->memoryLimit)
-            ? (int) $defaultSettings['memory_limit']
-            : (int) $workAnnotation->memoryLimit;
+            ? (int)$defaultSettings['memory_limit']
+            : (int)$workAnnotation->memoryLimit;
     }
 
     /**
      * Creates job collection of worker
      *
      * @param ReflectionClass $reflectionClass Reflexion class
-     * @param Reader          $reader          ReaderAnnotation class
+     * @param Reader $reader ReaderAnnotation class
      *
      * @return WorkerClass self Object
      */
@@ -319,29 +335,32 @@ class WorkerClass
         /**
          * For each defined method, we parse it
          */
-        foreach ($reflectionClass->getMethods() as $reflectionMethod) {
+        foreach ($reflectionClass->getMethods() as $reflectionMethod)
+        {
 
             $methodAnnotations = $reader->getMethodAnnotations($reflectionMethod);
 
             /**
              * Every annotation found is parsed
              */
-            foreach ($methodAnnotations as $methodAnnotation) {
+            foreach ($methodAnnotations as $methodAnnotation)
+            {
 
                 /**
                  * Annotation is only loaded if is typeof JobAnnotation
                  */
-                if ($methodAnnotation instanceof JobAnnotation) {
+                if ($methodAnnotation instanceof JobAnnotation)
+                {
                     /**
                      * Creates new Job
                      */
                     $job = new Job($methodAnnotation, $reflectionMethod, $this->callableName, $this->servers, array(
-                        'jobPrefix'            => $this->jobPrefix,
-                        'iterations'           => $this->iterations,
-                        'method'               => $this->defaultMethod,
+                        'jobPrefix' => $this->jobPrefix,
+                        'iterations' => $this->iterations,
+                        'method' => $this->defaultMethod,
                         'minimumExecutionTime' => $this->minimumExecutionTime,
-                        'timeout'              => $this->timeout,
-                        'memoryLimit'          => $this->memoryLimit,
+                        'timeout' => $this->timeout,
+                        'memoryLimit' => $this->memoryLimit,
                     ));
 
                     $jobCollection->add($job);
@@ -361,18 +380,18 @@ class WorkerClass
     {
         return array(
 
-            'namespace'            => $this->namespace,
-            'className'            => $this->className,
-            'fileName'             => $this->fileName,
-            'callableName'         => $this->callableName,
-            'description'          => $this->description,
-            'service'              => $this->service,
-            'servers'              => $this->servers,
-            'iterations'           => $this->iterations,
+            'namespace' => $this->namespace,
+            'className' => $this->className,
+            'fileName' => $this->fileName,
+            'callableName' => $this->callableName,
+            'description' => $this->description,
+            'service' => $this->service,
+            'servers' => $this->servers,
+            'iterations' => $this->iterations,
             'minimumExecutionTime' => $this->minimumExecutionTime,
-            'timeout'              => $this->timeout,
-            'jobs'                 => $this->jobCollection->toArray(),
-            'memoryLimit'          => $this->memoryLimit,
+            'timeout' => $this->timeout,
+            'jobs' => $this->jobCollection->toArray(),
+            'memoryLimit' => $this->memoryLimit,
         );
     }
 

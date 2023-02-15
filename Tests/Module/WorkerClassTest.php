@@ -17,6 +17,7 @@ use Doctrine\Common\Annotations\SimpleAnnotationReader;
 
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
 use Mmoreram\GearmanBundle\Module\WorkerClass;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Tests JobClassTest class
@@ -178,7 +179,8 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             $this->reflectionClass,
             $this->reader,
             $this->servers,
-            $this->defaultSettings
+            $this->defaultSettings,
+            new Container()
         );
 
         $this->assertEquals($workerClass->toArray(), array(
@@ -240,7 +242,8 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             $this->reflectionClass,
             $this->reader,
             $this->servers,
-            $this->defaultSettings
+            $this->defaultSettings,
+            new Container()
         );
 
         $this->assertEquals($workerClass->toArray(), array(
@@ -303,7 +306,8 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             $this->reflectionClass,
             $this->reader,
             $this->servers,
-            $this->defaultSettings
+            $this->defaultSettings,
+            new Container()
         );
 
         $this->assertEquals($workerClass->toArray(), array(

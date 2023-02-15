@@ -146,12 +146,12 @@ class GearmanParser
 
                 break;
             }
-            
+
             $bundleNamespace = $bundleSettings['name'];
             $Bnames = explode("\\", $bundleNamespace);
 
             $bundlePath = $kernelBundles[array_pop($Bnames)]->getPath();
-            
+
             if (!empty($bundleSettings['include'])) {
 
                 foreach ($bundleSettings['include'] as $include) {
@@ -257,7 +257,7 @@ class GearmanParser
                     /**
                      * Creates new Worker element with all its Job data
                      */
-                    $worker = new Worker($annotation, $reflectionClass, $reader, $this->servers, $this->defaultSettings);
+                    $worker = new Worker($annotation, $reflectionClass, $reader, $this->servers, $this->defaultSettings, $this->kernel->getContainer());
                     $workerCollection->add($worker);
                 }
             }
