@@ -42,6 +42,7 @@ services:
         calls:
             - [setContainer,  ["@service_container"]]
             - [setEventDispatcher, ["@event_dispatcher"]]
+        public: true
 
     gearman:
         class: "%gearman.client.class%"
