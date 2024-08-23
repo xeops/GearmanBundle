@@ -1,6 +1,4 @@
 services:
-    _defaults:
-        public: true
     #
     # Services
     #
@@ -43,6 +41,7 @@ services:
         calls:
             - [setContainer,  ["@service_container"]]
             - [setEventDispatcher, ["@event_dispatcher"]]
+        public: true
 
     gearman:
         class: "%gearman.client.class%"
@@ -53,3 +52,4 @@ services:
             - [setGearmanCallbacksDispatcher, ["@gearman.dispatcher.callbacks"]]
             - [setUniqueJobIdentifierGenerator, ["@gearman.unique_job_identifier"]]
             - [setDefaultSettings, ["%gearman.default.settings%"]]
+        public: true
