@@ -73,7 +73,7 @@ class GearmanWorkerListCommand extends AbstractGearmanCommand
     {
         if ($input->getOption('quiet'))
         {
-            return self::SUCCESS;
+            return static::SUCCESS;
         }
 
         $workers = $this->gearmanClient->getWorkers();
@@ -100,6 +100,6 @@ class GearmanWorkerListCommand extends AbstractGearmanCommand
             }
         }
 
-        return self::SUCCESS;
+        return static::SUCCESS;
     }
 }
