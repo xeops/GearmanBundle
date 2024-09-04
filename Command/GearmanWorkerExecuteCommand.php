@@ -170,7 +170,7 @@ class GearmanWorkerExecuteCommand extends AbstractGearmanCommand
                 new ConfirmationQuestion('This will execute asked worker with all its jobs?')
             )
         ) {
-            return;
+	        return static::SUCCESS;
         }
 
         if (!$input->getOption('quiet')) {
@@ -217,5 +217,7 @@ class GearmanWorkerExecuteCommand extends AbstractGearmanCommand
                 'timeout'                => $input->getOption('timeout'),
                 'memoryLimit'            => $input->getOption('memory-limit')
             ));
+
+	    return static::SUCCESS;
     }
 }
